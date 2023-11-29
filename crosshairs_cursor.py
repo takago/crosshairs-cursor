@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 # 鷹合研(2023,11/29)
 # テキトウに作った十字カーソル
 # (タイマーを使っているので重いかも)
@@ -39,7 +41,7 @@ class GUI(QWidget):
             win_flags |= Qt.WindowTransparentForInput # 下側のアプリを操作できる(その代わり，テキスト入力やボタンが押せなくなる)
                                                       # 文字列などを画面上にオーバレイ表示させるのに使えそう
             win_flags |= Qt.Tool                      # 「パネル」にアプリケーションアイコンを表示しない
-            
+
             self.setWindowFlags(win_flags)
             self.setAttribute(Qt.WA_TranslucentBackground)
             self.setStyleSheet("background: rgba(0,0,0,0%)")
@@ -67,7 +69,7 @@ class GUI(QWidget):
         self.tray = QSystemTrayIcon(QIcon(self.myicon['hide']))
         self.tray.show()
         self.tray.setToolTip('Crosshairs Cursor')
-        self.SHOW=True
+        self.SHOW=False
         self.tray.activated.connect(self.onActivated)       # クリックされたら
 
     def TimeUp(self):
