@@ -72,15 +72,18 @@ class GUI(QWidget):
         self.SHOW=False
         self.tray.activated.connect(self.onActivated)       # クリックされたら
 
+        #-----------------------------------------------------
+        # ペンの設定
+        self.pen = QPen(QColor(0xF0, 0x3A, 0xA0, 50)) # カーソルの色，透明度
+        self.pen.setWidth(16)
+
     def TimeUp(self):
+        # カーソル位置の取得
         x = QCursor.pos().x()-10
         y = QCursor.pos().y()-5  # カーソルサイズ
-        # print(x,y)
-        pen = QPen(QColor(0xFF, 0, 0, 50)) # カーソルの色，透明度
-        pen.setWidth(16)
         self.scene.clear()
-        self.scene.addLine(QLineF(x,  0, x, screen_size.height()), pen) # 横線
-        self.scene.addLine(QLineF(0,  y, screen_size.width(),y), pen)   # 縦線
+        self.scene.addLine(QLineF(x,  0, x, screen_size.height()), self.pen) # 横線
+        self.scene.addLine(QLineF(0,  y, screen_size.width(),y), self.pen)   # 縦線
 
     def onActivated(self, reason):
         self.SHOW = not self.SHOW
