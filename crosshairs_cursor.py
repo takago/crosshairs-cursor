@@ -38,6 +38,8 @@ class GUI(QWidget):
             win_flags |= Qt.WindowStaysOnTopHint      # 常に最前面になる（他が全画面表示しても大丈夫）
             win_flags |= Qt.WindowTransparentForInput # 下側のアプリを操作できる(その代わり，テキスト入力やボタンが押せなくなる)
                                                       # 文字列などを画面上にオーバレイ表示させるのに使えそう
+            win_flags |= Qt.Tool                      # 「パネル」にアプリケーションアイコンを表示しない
+            
             self.setWindowFlags(win_flags)
             self.setAttribute(Qt.WA_TranslucentBackground)
             self.setStyleSheet("background: rgba(0,0,0,0%)")
