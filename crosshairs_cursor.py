@@ -60,12 +60,11 @@ class GUI(QWidget):
         self.timer.setSingleShot(False)  # 連続 or 1ショットか
         self.timer.setInterval(25)
         self.timer.timeout.connect(self.TimeUp)
-        self.timer.start()
 
         #-----------------------------------------------------
         # システムトレイの設置
 
-        self.tray = QSystemTrayIcon(QIcon(self.myicon['show']))
+        self.tray = QSystemTrayIcon(QIcon(self.myicon['hide']))
         self.tray.show()
         self.tray.setToolTip('Crosshairs Cursor')
         self.SHOW=True
