@@ -45,7 +45,6 @@ class GUI(QWidget):
             self.setStyleSheet("background: rgba(0,0,0,0%)")
 
 
-
         # 空の縦レイアウトを作る
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
@@ -60,7 +59,7 @@ class GUI(QWidget):
         self.timer = QTimer()
         self.timer.setSingleShot(False)  # 連続 or 1ショットか
         self.timer.setInterval(25)
-        self.timer.timeout.connect(self.cntup)
+        self.timer.timeout.connect(self.TimeUp)
         self.timer.start()
 
         #-----------------------------------------------------
@@ -72,7 +71,7 @@ class GUI(QWidget):
         self.SHOW=True
         self.tray.activated.connect(self.onActivated)       # クリックされたら
 
-    def cntup(self):
+    def TimeUp(self):
         x = QCursor.pos().x()-10
         y = QCursor.pos().y()-5  # カーソルサイズ
         # print(x,y)
@@ -87,9 +86,11 @@ class GUI(QWidget):
         if self.SHOW: # チェックされたら
             ui.show() # メインウィンドウを表示する
             self.tray.setIcon(QIcon(self.myicon['show']))
+            self.timer.start()
         else:
             ui.hide() # メインウィンドウを表示しない（タスクトレイのみになる）
             self.tray.setIcon(QIcon(self.myicon['hide']))
+            self.timer.stop()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
