@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Crosshairs Cursor
+Exec=/usr/local/bin/crosshairs_cursor
+Comment=Crosshairs Cursor (TAKAGO_LAB.)
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
