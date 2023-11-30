@@ -41,10 +41,10 @@ class GUI(QWidget):
             win_flags |= Qt.WindowTransparentForInput # 下側のアプリを操作できる(その代わり，テキスト入力やボタンが押せなくなる)
                                                       # 文字列などを画面上にオーバレイ表示させるのに使えそう
             win_flags |= Qt.Tool                      # 「パネル」にアプリケーションアイコンを表示しない
-
+            win_flags |= Qt.WindowFullScreen          # フルスクリーン
             self.setWindowFlags(win_flags)
             self.setAttribute(Qt.WA_TranslucentBackground)
-            self.setStyleSheet("background: rgba(0,0,0,0%)")
+            self.setStyleSheet("background: rgba(0,0,0,0%); border: 0px")
 
 
         # 空の縦レイアウトを作る
@@ -63,6 +63,32 @@ class GUI(QWidget):
         self.timer.setInterval(25)
         self.timer.timeout.connect(self.TimeUp)
 
+        #------------------------------------------------------
+        # コンテキストメニューの登録
+        mymenu = QMenu(self)
+        self.mylist=['Vertical Line','Horizontal Line']
+        self.action=dict()
+        for text in list(self.mylist):
+            self.action[text] = QAction(text, mymenu, checkable=True)
+            self.action[text].setChecked(True)
+            mymenu.addAction(self.action[text])
+        # セパレータ
+        mymenu.addSeparator()
+
+        # メニュー項目（ダイアログ）
+        myact5 = QAction('Information', mymenu)
+        mymenu.addAction(myact5)
+        myact5.triggered.connect(self.showdialog)
+        app.setQuitOnLastWindowClosed(False) # ダイアログを閉じてもメインプログラムは止めない
+
+        # セパレータ
+        mymenu.addSeparator()
+
+        # タスクトレイ
+        myact6 = QAction('Quit', mymenu)
+        mymenu.addAction(myact6)
+        myact6.triggered.connect(sys.exit)
+
         #-----------------------------------------------------
         # システムトレイの設置
 
@@ -71,19 +97,42 @@ class GUI(QWidget):
         self.tray.setToolTip('Crosshairs Cursor')
         self.SHOW=False
         self.tray.activated.connect(self.onActivated)       # クリックされたら
+        self.tray.setContextMenu(mymenu)                    # コンテクストメニューを開けるようにする
+
+        #-----------------------------------------------------
+
+        # メッセージボックス
+        self.mymsg = QMessageBox()
+        self.mymsg.setIcon(QMessageBox.Information)
+        self.mymsg.setText("Crosshairs-Cursor\nCopyright 2023 TAKAGO LAB.")
+        self.mymsg.setWindowTitle("About this application")
+        self.mymsg.setWindowIcon(QIcon(self.myicon['show']))
 
         #-----------------------------------------------------
         # ペンの設定
         self.pen = QPen(QColor(0xF0, 0x3A, 0xA0, 50)) # カーソルの色，透明度
         self.pen.setWidth(16)
 
+    def showdialog(self):
+        self.mymsg.show()
+
+    def onTriggered(self, action):
+        txt = action.text()
+        print(action)
+
     def TimeUp(self):
-        # カーソル位置の取得
-        x = QCursor.pos().x()-10
-        y = QCursor.pos().y()-5  # カーソルサイズ
+        x = QCursor.pos().x()
+        y = QCursor.pos().y()
+        # print(x,y)
+        pen = QPen(QColor(0xFF, 0, 0, 50)) # カーソルの色，透明度
+        pen.setWidth(16)
+        x -=8
+        y -=8
         self.scene.clear()
-        self.scene.addLine(QLineF(x,  0, x, screen_size.height()), self.pen) # 横線
-        self.scene.addLine(QLineF(0,  y, screen_size.width(),y), self.pen)   # 縦線
+        if self.action['Vertical Line'].isChecked():
+            self.scene.addLine(QLineF(x,  0, x, screen_size.height()), self.pen) # 横線
+        if self.action['Horizontal Line'].isChecked():
+            self.scene.addLine(QLineF(0,  y, screen_size.width(),y), self.pen)   # 縦線
 
     def onActivated(self, reason):
         self.SHOW = not self.SHOW
