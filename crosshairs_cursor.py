@@ -55,7 +55,10 @@ class GUI(QWidget):
         self.scene = QGraphicsScene()
         view = QGraphicsView(self.scene)
         view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff) # スクロールバーを表示しない
+        view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff) # スクロールバーを表示しない
+
         self.layout.addWidget(view)
+
 
         # タイマー
         self.timer = QTimer()
