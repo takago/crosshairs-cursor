@@ -69,6 +69,7 @@ class GUI(QWidget):
         #------------------------------------------------------
         # コンテキストメニューの登録
         mymenu = QMenu(self)
+        mymenu.setStyleSheet("background: rgba(255,255,255,50%); border: 0px")
         self.mylist=['Vertical Line','Horizontal Line']
         self.action=dict()
         for text in list(self.mylist):
